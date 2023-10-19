@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+<entry key="insertProductAttachment">
+INSERT INTO ATTACHMENT VALUES(FISEQ.NEXTVAL,?,SYSDATE,?,?)
+</entry>
+
+<entry key="insertProduct">
+INSERT INTO PRODUCT VALUES(PRSEQ.NEXTVAL,?,?,?,?,FISEQ.CURRVAL,'Y')
+</entry>
+
+<entry key="insertNutrition">
+INSERT INTO NUTRITION VALUES(PRSEQ.CURRVAL,?,?,?,?,?,?,?)
+</entry>
+
+<entry key="selectProductList">
+
+SELECT PRODUCT_NO,FILE_PATH || CHANGE_NAME "FILE_PATH" ,PRODUCT_NAME,PRODUCT_EXPLAIN,PRODUCT_PRICE,ORIGIN,PRODUCT_STATUS
+FROM PRODUCT P
+JOIN ATTACHMENT A
+ON P.PRODUCT_NO = A.FILE_NO
+
+
+</entry>
+
+
+<entry key="selectProductDetailList">
+
+SELECT PRODUCT_NO,FILE_PATH || CHANGE_NAME "FILE_PATH" ,PRODUCT_NAME,PRODUCT_EXPLAIN,PRODUCT_PRICE,ORIGIN
+FROM PRODUCT P
+JOIN ATTACHMENT A
+ON P.PRODUCT_NO = A.FILE_NO
+WHERE PRODUCT_NO = ?
+
+
+
+</entry>
+
+<entry key="deleteProductList">
+    UPDATE PRODUCT
+    SET PRODUCT_STATUS = 'N'
+    WHERE PRODUCT_NO = ?
+
+</entry>
+
+
+</properties>

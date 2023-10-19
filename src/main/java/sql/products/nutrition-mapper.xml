@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+
+	<entry key="nutritionList">
+		SELECT
+			PRODUCT_NAME,
+	      	KCAL,
+	      	SERVING_SIZE,
+	      	SUGAR,
+	      	PROTEIN,
+	      	FAT,
+	      	NA,
+	      	ALLERGY
+      	FROM NUTRITION 
+      	JOIN PRODUCT USING(PRODUCT_NO)
+      	WHERE PRODUCT_STATUS = 'Y'
+      	ORDER BY PRODUCT_NO DESC
+	</entry>
+	
+	<entry key="nutritionSearchList">
+
+      SELECT 
+      	PRODUCT_NAME,
+      	KCAL,
+      	SERVING_SIZE,
+      	SUGAR,
+      	PROTEIN,
+      	FAT,
+      	NA,
+      	ALLERGY
+      FROM NUTRITION N
+      JOIN PRODUCT P ON N.PRODUCT_NO = P.PRODUCT_NO
+      WHERE PRODUCT_STATUS = 'Y'
+      	AND PRODUCT_NAME LIKE '%' || ? || '%'
+      ORDER BY P.PRODUCT_NO DESC
+
+	</entry>
+
+</properties>

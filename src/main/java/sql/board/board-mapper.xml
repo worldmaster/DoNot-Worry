@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="selectListCount">
+		SELECT COUNT(*)
+		FROM CONTACT
+		WHERE CONT_STATUS='Y' 
+	</entry>
+	
+	
+	<entry key="selectList">
+			SELECT *
+		FROM (
+			 SELECT ROWNUM RNUM, A.*
+             FROM
+             (SELECT
+			 CONT_NO,
+			 CONT_TITLE,
+			 USER_ID,
+			 CONT_DATE
+		FROM CONTACT C
+		JOIN MEMBER ON (CONT_WRITER = USER_NO)
+		WHERE CONT_STATUS = 'Y'
+		ORDER BY CONT_NO DESC) A
+		)
+		WHERE RNUM BETWEEN ? AND ?
+	
+	</entry>
+	
+		<entry key="selectContact">
+	SELECT CONT_NO,
+       CONT_TITLE,
+       CONT_CONT,
+       USER_ID,
+       CONT_DATE,
+       USER_REPLY,
+       ADMIN_REPLY
+		FROM CONTACT C
+		JOIN MEMBER M 
+		ON C.CONT_WRITER = M.USER_NO
+		WHERE CONT_NO = ?
+</entry>
+
+	<entry key="updateContact">
+	    UPDATE CONTACT
+    SET CONT_TITLE = ?,
+        CONT_CONT = ?,
+        USER_REPLY = ? 
+    WHERE CONT_NO = ?
+
+	</entry>
+
+	<entry key="deleteContact">
+	
+	DELETE FROM CONTACT 
+	WHERE CONT_NO = ?
+	
+	</entry>
+
+	<entry key="insertContact">
+	
+		INSERT INTO CONTACT(CONT_NO, CONT_TITLE, CONT_CONT, CONT_WRITER,USER_REPLY)
+		VALUES (SEQ.NEXTVAL, ?,?,?,?)
+	
+	
+	</entry>
+	
+
+</properties>

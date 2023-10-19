@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+	<entry key="storeList">
+		SELECT *
+		FROM STORE
+	</entry>
+
+	<entry key="delInput">
+		INSERT INTO DELIVERY(DELIVERY_NO, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_ADDRESS, MSG, DELIVERY_DATE)
+		VALUES(DEL_SEQ.NEXTVAL, ?, ?, ?, ?, ?)
+	</entry>
+	
+	<entry key="orderInput">
+		INSERT INTO ORDERS(ORDER_NO, USER_NO, ORDER_WAY, ORDER_PRICE, ST_ID, DELIVERY_NO)
+		VALUES(?, ?, ?, ?, ?, DEL_SEQ.CURRVAL)
+	</entry>
+	
+	<entry key="orderProductInput">
+		INSERT INTO ORDER_PRODUCT(ORDER_NO, USER_NO, PRODUCT_NO, PRODUCT_QCY)
+		VALUES(?, ?, ?, ?)
+	</entry>
+	
+	<entry key="payOrderList">
+		SELECT ORDER_NO, DELIVERY_NO
+		FROM (SELECT ORDER_NO, DELIVERY_NO
+        FROM ORDERS
+        JOIN MEMBER USING(USER_NO)
+        WHERE USER_NO = ?
+        ORDER BY ORDER_NO DESC
+        ) A
+		WHERE ROWNUM = 1
+	</entry>
+	
+	<entry key="payDeliveryList">
+		SELECT DELIVERY_DATE
+        FROM DELIVERY
+        WHERE DELIVERY_NO = ?
+	</entry>
+	
+	<entry key="payOpList">
+		SELECT PRODUCT_NO
+        FROM ORDER_PRODUCT
+        WHERE ORDER_NO = ?
+	</entry>
+
+</properties>

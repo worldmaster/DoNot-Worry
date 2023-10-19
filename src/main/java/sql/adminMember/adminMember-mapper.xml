@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="selectManageList">
+	SELECT USER_NO, USER_ID, USER_NAME, B_DAY, PHONE, ADDRESS, STATUS
+	FROM MEMBER
+	ORDER BY USER_NO
+	</entry>
+	
+	<entry key="updateUserDetail">
+		SELECT USER_ID, USER_NAME, B_DAY, PHONE, ADDRESS, STATUS
+		FROM MEMBER
+		WHERE STATUS = 'Y' AND USER_NO = ?
+	</entry>
+	
+	<entry key="updateUser">
+		UPDATE MEMBER
+		SET USER_NAME = ?,
+		B_DAY = ?,
+		PHONE = ?,
+		ADDRESS = ?
+		WHERE USER_NO = ?
+	</entry>
+	
+<!-- 	<entry key="selectUser"> -->
+<!-- 		SELECT USER_NO, USER_ID, USER_NAME, B_DAY, PHONE, ADDRESS, STATUS -->
+<!-- 		FROM MEMBER -->
+<!-- 		WHERE USER_NO = ? AND STATUS = 'Y' -->
+<!-- 	</entry> -->
+	
+	<entry key="deleteUser">
+		 UPDATE MEMBER
+        SET STATUS = 'N'
+		WHERE USER_NO = ?
+	</entry>
+	
+</properties>

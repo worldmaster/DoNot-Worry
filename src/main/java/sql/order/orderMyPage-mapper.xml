@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="selectListCount">
+		SELECT COUNT(*)
+		FROM ORDERS
+		WHERE 
+		    (CASE WHEN 'ignore' = ? THEN 1 ELSE 0 END) = 1
+		    OR USER_NO = ?
+	</entry>
+	
+	
+
+	<entry key="selectList">
+		
+		SELECT *
+		FROM (
+		    SELECT ROWNUM RNUM , A.*
+		    FROM (
+				SELECT "ORDER_DATE" "주문날짜", ST_NAME"주문지점",
+				(SELECT LISTAGG(PRODUCT_NAME || ' ')  WITHIN GROUP(ORDER BY PRODUCT_NO) 
+				FROM "ORDER_PRODUCT" 
+				JOIN PRODUCT  USING (PRODUCT_NO)
+				WHERE ORDER_NO = O.ORDER_NO
+				) AS "상품명", ORDER_NO "주문번호", DECODE(DELIVERY_STATUS, 'Y','배송중','N','배송완료') "배송상황", ORDER_CANCEL "취소신청", USER_ID "아이디"
+				FROM ORDERS O
+				LEFT JOIN STORE USING (ST_ID)
+				LEFT JOIN DELIVERY USING (DELIVERY_NO)
+				LEFT JOIN MEMBER USING(USER_NO)
+				WHERE 
+				    (CASE WHEN 'ignore' = ? THEN 1 ELSE 0 END) = 1
+				    OR USER_NO = ?
+					
+				AND "ORDER_STATUS" = 'Y'
+				ORDER BY "ORDER_NO" DESC ) A
+				) 
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<entry key="selectOPList">
+		SELECT  FILE_PATH||CHANGE_NAME "파일경로", PRODUCT_NAME "상품명", PRODUCT_QCY "수량", PRODUCT_PRICE "상품가격", TO_NUMBER(REGEXP_REPLACE(PRODUCT_PRICE, '[^0-9]+', ''))*PRODUCT_QCY "결제가격"
+      FROM "ORDER_PRODUCT" 
+      LEFT JOIN PRODUCT  USING (PRODUCT_NO)
+      JOIN ATTACHMENT USING(FILE_NO)
+      WHERE "ORDER_NO" = ?
+	</entry>
+	
+	<entry key="selectOrder">
+		SELECT *
+		FROM ORDERS
+		WHERE "ORDER_NO" = ?
+		
+	</entry>
+
+	<entry key="selectStore">
+		SELECT ST_ID, ST_NAME
+		FROM ORDERS
+		JOIN STORE USING(ST_ID)
+		WHERE "ORDER_NO" = ?
+	</entry>
+
+	<entry key="selectMember">
+		SELECT USER_NO, USER_ID, USER_PWD, USER_NAME, ADDRESS, B_DAY, PHONE, STATUS
+		FROM ORDERS
+		JOIN MEMBER USING(USER_NO)
+		WHERE "ORDER_NO" = ?
+	</entry>
+
+	<entry key="selectDelivery">
+		SELECT DELIVERY_NO, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_ADDRESS, MSG, DELIVERY_STATUS, DELIVERY_DATE
+		FROM ORDERS
+		JOIN DELIVERY USING(DELIVERY_NO)
+		WHERE "ORDER_NO" = ?
+	</entry>
+
+	<entry key="updateCancelrequest">
+		UPDATE ORDERS
+		SET ORDER_CANCEL = 'Y'
+		WHERE "ORDER_NO" = ?
+	</entry>
+	
+	<entry key="searchDelivery">
+		SELECT DELIVERY_NO
+		FROM ORDERS
+		WHERE "ORDER_NO" = ?
+	</entry>
+	
+	
+	<entry key="deleteOrderProduct">
+		DELETE FROM "ORDER_PRODUCT"
+		WHERE "ORDER_NO" = ? 
+	</entry>
+	
+	<entry key="deleteOrder">
+		DELETE FROM ORDERS
+		WHERE "ORDER_NO" = ?
+	</entry>
+
+	<entry key="deleteDelivery">
+		DELETE FROM DELIVERY
+		WHERE DELIVERY_NO = ?
+		
+	</entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</properties>
